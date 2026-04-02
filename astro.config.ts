@@ -20,7 +20,7 @@ export default defineConfig({
 	site: PUBLIC_WEBSITE_URL,
 
 	// Static output — switch to 'hybrid' if you embed Sanity Studio
-	output: 'static', // or "server"
+	output: 'server', // or "server"
 
 	build: {
 		// Inline small CSS, external large — reduces render-blocking requests
