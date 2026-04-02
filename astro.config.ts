@@ -3,7 +3,6 @@ import { loadEnv } from 'vite';
 import sanity from '@sanity/astro';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import node from '@astrojs/node';
 
 import vercel from '@astrojs/vercel';
 
