@@ -1,0 +1,28 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.prose-image {
+  margin-block: var(--space-7);
+
+  img {
+    width: 100%;
+    border-radius: var(--radius-md);
+  }
+
+  figcaption {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    text-align: center;
+    margin-top: var(--space-2);
+    font-style: italic;
+  }
+}

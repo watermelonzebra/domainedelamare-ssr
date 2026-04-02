@@ -1,0 +1,111 @@
+---
+/**
+ * src/pages/index.astro — Homepage
+ *
+ * Shows the latest 6 posts in a responsive grid.
+ * Heading hierarchy: h1 (page) → h2 (each PostCard title)
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+import HomePage from '@/components/index/HomePage';
+
+import { getPageContent } from '@/sanity/queries/pageContent';
+import { getPosts } from '@/sanity/queries/posts';
+import { getSiteSettings } from '@/sanity/queries/siteSettings';
+import { stegaClean } from '@sanity/client/stega';
+import builder from '@/utils/image';
+// TODO add the clean thing for stega data
+
+const isDraftMode = Astro.url.searchParams.get('draft') === 'true'
+
+// const siteSettings = await getSiteSettings(isDraftMode);
+// const imageUrl = siteSettings.seo.ogImage ? builder.url(siteSettings.seo.ogImage, { width: 1200, height: 600 }) : '';
+
+// const heroData = await getPageContent(isDraftMode, 'news');
+// const postsData = await getPosts(isDraftMode);
+// const regionData = await getPageContent(isDraftMode, 'region');
+// const contactData = await getPageContent(isDraftMode, 'contact');
+
+// Full QueryResponseInitial objects — NOT .data
+const [pageContent, posts, siteSettings] = await Promise.all([
+	getPageContent(isDraftMode),
+	getPosts(isDraftMode),
+	getSiteSettings(isDraftMode),
+]);
+console.log('[server] posts.sourceMap:', posts.sourceMap ? '✅ present' : '❌ missing');
+
+// SEO uses .data — these never need to be live, clean stega
+const imageUrl = siteSettings.data?.seo?.ogImage
+	? builder.url(siteSettings.data.seo.ogImage, { width: 1200, height: 600 })
+	: '';
+---
+
+<PageLayout
+	title={stegaClean(siteSettings.data?.siteName ?? 'Domaine de la Mare')}
+	description={stegaClean(siteSettings.data?.siteDescription ?? undefined)}
+	ogImage={imageUrl}
+>
+	<h1 class="hidden">
+		Artopex, votre partenaire pour trouver un nouveau logement à Arnèke. Demandez une visite sans engagement.
+	</h1>
+	<HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only="react" />
+</PageLayout>
+
+<style>
+	.hero {
+		padding-block: var(--space-9) var(--space-7);
+	}
+
+	.hero__title {
+		font-size: var(--text-5xl);
+		font-weight: 800;
+		letter-spacing: -0.025em;
+		margin-bottom: var(--space-3);
+	}
+
+	.hero__lead {
+		font-family: var(--font-serif);
+		font-size: var(--text-xl);
+		color: var(--color-text-muted);
+		max-width: 520px;
+		margin: 0;
+	}
+
+	.post-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: var(--space-6);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		padding-bottom: var(--space-9);
+	}
+
+	@media (min-width: 640px) {
+		.post-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 900px) {
+		.post-grid {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	.empty-state {
+		font-family: var(--font-serif);
+		font-size: var(--text-lg);
+		color: var(--color-text-muted);
+		padding-block: var(--space-9);
+	}
+
+	section {
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		gap: var(--spacing-xxxl);
+
+		width: 100%;
+		margin: 0 auto;
+	}
+</style>

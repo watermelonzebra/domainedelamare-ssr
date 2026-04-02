@@ -1,0 +1,48 @@
+.buurt {
+  width: 100%;
+
+  padding: var(--spacing-l);
+  padding-top: 0;
+  padding-bottom: var(--spacing-xxl);
+
+  background-color: var(--main);
+  color: var(--white);
+
+  @media screen and (min-width: 500px) {
+    padding: 0 var(--spacing-xl) var(--spacing-xxl) var(--spacing-xl);
+  }
+}
+
+.buurt-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+
+  display: inline-block;
+
+  aspect-ratio: 12/9;
+
+  margin: 0 auto;
+  margin-top: -10rem;
+
+  animation: fade-in linear both;
+  animation-timeline: view(block);
+  animation-range: cover 0% cover 25%;
+
+  @media screen and (min-width: 500px) {
+    aspect-ratio: 6/3;
+  }
+
+  @media screen and (min-width: 1000px) {
+    aspect-ratio: unset;
+  }
+}
+
+.buurt-content {
+  h3 {
+    font-family: var(--font-family-h);
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-m);
+  }
+}

@@ -1,0 +1,158 @@
+---
+import { getPageContent } from '@/sanity/queries/pageContent';
+import { Icon } from '../ui/Icon';
+
+/**
+ * Footer — common/Footer.astro
+ *
+ * Accessibility:
+ * - <footer> landmark with aria-label
+ * - Links use descriptive text (not "click here")
+ */
+const year = new Date().getFullYear();
+
+const data = (await getPageContent(Astro.locals.isDraftMode, 'social')).data?.socialMedia;
+---
+
+<footer>
+	<div class="footer-wrapper">
+		<div class="footer-main__info">
+			<a href="/" class="nav-link -main"> Artopex </a>
+			<ul>
+				{
+					data?.facebook && (
+						<li>
+							<a
+								class="footer-icon"
+								href={data?.facebook || '#'}
+								aria-label="Facebook Domaine de la Mare"
+								target="_blank"
+								rel="noopener"
+							>
+								<Icon type="facebook" />
+							</a>
+						</li>
+					)
+				}
+				{
+					data?.instagram && (
+						<li>
+							<a
+								class="footer-icon"
+								href={data?.instagram || '#'}
+								aria-label="Instagram Domaine de la Mare"
+								target="_blank"
+								rel="noopener"
+							>
+								<Icon type="instagram" />
+							</a>
+						</li>
+					)
+				}
+				{
+					data?.linkedin && (
+						<li>
+							<a
+								class="footer-icon"
+								href={data?.linkedin || '#'}
+								aria-label="LinkedIn Domaine de la Mare"
+								target="_blank"
+								rel="noopener"
+							>
+								<Icon type="linkedin" />
+							</a>
+						</li>
+					)
+				}
+			</ul>
+		</div>
+		<p>&copy; {year} Domaine de la Mare. Tous droits réservés.</p>
+		<p>
+			Réalisé avec ❤️ par
+			<a href="https://www.trustthebelly.be" aria-label="To developers website" target="_blank">Trust The Belly</a>
+		</p>
+	</div>
+</footer>
+
+<style lang="scss">
+	footer {
+		padding: var(--spacing-xl);
+		padding-top: var(--spacing-xxxl);
+		text-align: center;
+
+		margin-top: auto;
+
+		@media screen and (min-width: 500px) {
+			padding: var(--spacing-xxl);
+		}
+	}
+
+	.footer-wrapper {
+		max-width: 1200px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.footer-main__info {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--spacing-xl);
+
+		margin-bottom: var(--spacing-xl);
+		width: 100%;
+
+		ul {
+			list-style: none;
+			display: flex;
+			gap: var(--spacing-xl);
+			padding: 0;
+			margin: 0;
+		}
+
+		@media screen and (min-width: 575px) {
+			flex-direction: row;
+		}
+	}
+
+	p {
+		margin: 0.5rem 0;
+	}
+
+	a {
+		color: var(--dark);
+		text-decoration: none;
+
+		&:hover {
+			color: var(--light);
+		}
+	}
+
+	.nav-link.-main {
+		display: flex;
+		align-items: center;
+
+		margin-left: 0;
+
+		cursor: pointer;
+
+		font-family: var(--font-family-h);
+		font-weight: bold;
+		font-size: var(--font-size-h3);
+
+		img {
+			margin-right: var(--spacing-xs);
+		}
+	}
+
+	.footer-icon {
+		font-size: 2.4rem;
+
+		:hover {
+			transform: scale(0.95);
+		}
+	}
+</style>

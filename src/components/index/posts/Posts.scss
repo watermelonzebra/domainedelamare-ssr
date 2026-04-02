@@ -1,0 +1,82 @@
+.posts {
+  width: 100%;
+}
+
+h2 {
+  font-size: 8dvw;
+  font-weight: bold;
+  text-transform: uppercase;
+
+  margin-bottom: var(--spacing-m);
+
+  @media screen and (min-width: 500px) {
+    margin-bottom: var(--spacing-l);
+  }
+
+  @media screen and (min-width: 768px) {
+    font-size: 8dvw;
+  }
+
+  @media screen and (min-width: 1000px) {
+    font-size: 8rem;
+  }
+}
+
+.posts-list {
+  list-style: none;
+  padding: 0;
+
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(auto, 1fr));
+  gap: 20px;
+
+  animation: fly-in linear both;
+  animation-timeline: view(block);
+  animation-range: cover 0% cover 12%;
+
+  @media screen and (min-width: 700px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(calc(100% - 8rem) / 2), 1fr));
+  }
+
+  @media screen and (min-width: 1070px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(calc(100% - 8rem) / 3), 1fr));
+  }
+
+  @media screen and (min-width: 1440px) {
+    grid-template-columns: repeat(auto-fill, minmax(calc(calc(100% - 8rem) / 4), 1fr));
+  }
+
+  &.--1,
+  &.--2,
+  &.--3,
+  &.--4 {
+    padding-bottom: var(--spacing-xxl);
+  }
+}
+
+.posts-no-offers {
+  padding: 15rem 0;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-m);
+
+  h3 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-size: 1.6rem;
+    max-width: 40rem;
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 20rem 0;
+  }
+}

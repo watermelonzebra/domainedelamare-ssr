@@ -1,0 +1,144 @@
+---
+/**
+ * BaseLayout
+ * Root HTML shell. All SEO, canonical URLs, and OG tags live here — never
+ * duplicate them in child layouts or pages.
+ *
+ * Accessibility:
+ * - Skip-to-content link (first interactive element on the page)
+ * - lang attribute on <html>
+ * - Visible focus styles via global.css
+ */
+import '@/styles/global.scss';
+
+export interface Props {
+	title: string;
+	description?: string;
+	/** Absolute URL for og:image */
+	ogImage?: string;
+	/** Canonical URL override — defaults to Astro.url */
+	canonicalUrl?: string;
+	/** Page-level <head> content via named slot */
+}
+
+const { title, description = 'A blog powered by Astro and Sanity.', ogImage, canonicalUrl } = Astro.props;
+
+const siteUrl = Astro.site ?? new URL(Astro.url);
+const canonical = canonicalUrl ?? Astro.url.href;
+const resolvedOg = ogImage ? new URL(ogImage, siteUrl).href : undefined;
+
+// Visual Editing
+import { VisualEditingOverlay } from '@/components/VisualEditingOverlay';
+import { LiveModeProvider } from '@/components/LiveModeProvider';
+
+const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
+---
+
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- Primary meta -->
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		{resolvedOg && <meta property="og:image" content={resolvedOg} />}
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content={resolvedOg ? 'summary_large_image' : 'summary'} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		{resolvedOg && <meta name="twitter:image" content={resolvedOg} />}
+
+		<!-- load favicon -->
+		<link rel="icon" type="image/png" href="/img/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/img/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/img/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/img/favicon/apple-touch-icon.png" />
+		<meta name="apple-mobile-web-app-title" content="Domaine de la mare" />
+		<link rel="manifest" href="/img/favicon/site.webmanifest" />
+
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
+		<!-- load google fonts with combined URL (reduces requests) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="preload"
+			as="style"
+			href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@400;700&display=swap"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Montserrat:wght@400;700&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- robots -->
+		<meta name="robots" content="INDEX,FOLLOW" />
+
+		<!-- Page-specific head content (extra scripts, JSON-LD, etc.) -->
+		<slot name="head" />
+	</head>
+
+	<body>
+		<!--
+      Skip link — WCAG 2.4.1
+      Visually hidden until focused, reveals as first Tab stop.
+      Keyboard users can skip the repeated header navigation.
+    -->
+		<a class="skip-link" href="#main-content">Skip to main content</a>
+
+		<slot name="header" />
+
+		<!--
+      id="main-content" is the skip link target.
+      tabindex="-1" allows it to receive programmatic focus without
+      appearing in the natural tab order.
+    -->
+		<main id="main-content">
+			<slot />
+		</main>
+
+		{isDraftMode && <VisualEditingOverlay client:only="react" />}
+		{isDraftMode && <LiveModeProvider client:only="react" />}
+		<slot name="footer" />
+
+		<script>
+			function applyDraftToLinks() {
+				const isDraft = new URLSearchParams(window.location.search).get('draft') === 'true';
+				if (!isDraft) return;
+
+				setTimeout(() => {
+					document.querySelectorAll('a').forEach((link) => {
+						const url = new URL(link.href);
+						const sameOrigin = url.origin === window.location.origin;
+
+						if (!sameOrigin) return;
+
+						if (!url.searchParams.has('draft')) {
+							url.searchParams.set('draft', 'true');
+
+							// Preserve hash e.g. /#contact
+							link.setAttribute('href', url.pathname + url.search + url.hash);
+						}
+					});
+				}, 300);
+			}
+
+			// Run on initial load
+			applyDraftToLinks();
+
+			// Re-run if content changes (e.g. Astro View Transitions)
+			document.addEventListener('astro:page-load', applyDraftToLinks);
+		</script>
+	</body>
+</html>

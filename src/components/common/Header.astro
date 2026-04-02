@@ -1,0 +1,298 @@
+---
+/**
+ * Header — common/Header.astro
+ * Persistent site header with accessible navigation.
+ *
+ * Accessibility:
+ * - <header> landmark with aria-label
+ * - <nav> with aria-label
+ * - Active page indicated via aria-current="page"
+ * - Keyboard navigable (native <a> elements)
+ */
+
+import { headerRoutes } from '../../utils/routes';
+import { Icon } from '../ui/Icon';
+
+export interface Props {
+	siteName?: string;
+}
+
+const { siteName = 'Astro + Sanity' } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<script>
+	const navToggleInput = document.getElementById('nav-toggle') as HTMLInputElement;
+	function handleClose() {
+		if (navToggleInput) {
+			navToggleInput.checked = false;
+		}
+	}
+
+	const navCloseButton = document.getElementById('nav-close-button');
+	navCloseButton?.addEventListener('click', handleClose);
+
+	const navigationButtons = document.querySelectorAll('.site-header__nav-link');
+	navigationButtons.forEach((el) => {
+		el.addEventListener('click', handleClose);
+	});
+
+	window.addEventListener('resize', handleClose);
+</script>
+
+<header>
+	<div class="header-wrapper">
+		<a class="nav-link -main" aria-label=`${siteName} — return to homepage` href="/"> Artopex </a>
+
+		<input type="checkbox" id="nav-toggle" class="nav-toggle" />
+		<label for="nav-toggle" class="nav-toggle-label">
+			<Icon type="lines" stroke={2} />
+		</label>
+		<nav aria-label="Main navigation">
+			<div id="nav-close-button" class="nav-toggle-button">
+				<Icon type="times" stroke={2} />
+			</div>
+
+			{
+				headerRoutes.map(({ href, label }) => {
+					const isActive = currentPath === href || (href !== '/' && currentPath.startsWith(href));
+					return (
+						<a
+							href={href}
+							class:list={['nav-link -accent"', { 'is-active': isActive }]}
+							aria-current={isActive ? 'page' : undefined}
+						>
+							{label}
+						</a>
+					);
+				})
+			}
+		</nav>
+	</div>
+</header>
+
+<style lang="scss">
+	/* Pure CSS: Prevent scrolling when nav is open */
+	html:has(.nav-toggle:checked) {
+		overflow: hidden !important;
+		height: 100dvh;
+	}
+
+	header {
+		padding: var(--spacing-m);
+		border-radius: var(--spacing-l);
+
+		background-color: var(--white);
+
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		@media screen and (min-width: 550px) {
+			padding: var(--spacing-xl);
+			padding-bottom: var(--spacing-xxl);
+		}
+	}
+
+	.header-wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	input.nav-toggle {
+		display: none;
+	}
+
+	.nav-toggle-label {
+		cursor: pointer;
+
+		> svg > path {
+			stroke: var(--black);
+			transition: stroke 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+		}
+
+		&:hover {
+			> svg > path {
+				stroke: var(--main);
+			}
+		}
+	}
+
+	.nav-toggle ~ nav {
+		opacity: 0;
+		height: 100dvh;
+		width: 0;
+		overflow: hidden;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		z-index: 10;
+
+		display: inline-flex;
+		flex-flow: column;
+		gap: 0;
+
+		background-color: var(--white);
+		border-radius: 0 0 var(--spacing-l) var(--spacing-l);
+
+		padding: 0;
+
+		> a,
+		.nav-toggle-button {
+			height: 0;
+		}
+
+		transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+		@media screen and (min-width: 550px) {
+			width: auto;
+			padding: 0 var(--spacing-l);
+			padding-top: var(--spacing-l);
+		}
+	}
+
+	.nav-toggle:checked ~ nav {
+		opacity: 1;
+
+		width: 100%;
+		height: 100dvh;
+
+		gap: var(--spacing-l);
+
+		padding: var(--spacing-l);
+		padding-right: calc(var(--spacing-l) + var(--spacing-s));
+		padding-top: calc(var(--spacing-l) + var(--spacing-s));
+
+		> a {
+			height: auto;
+		}
+
+		> .nav-toggle-button {
+			height: 4rem;
+		}
+	}
+
+	.nav-toggle-button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		width: 4rem;
+		height: 4rem;
+
+		margin-bottom: var(--spacing-l);
+		margin-left: auto;
+
+		cursor: pointer;
+
+		> svg {
+			width: 2.6rem;
+			height: 2.6rem;
+		}
+
+		> svg > path {
+			stroke: var(--black);
+			transition: stroke 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+		}
+
+		&:hover {
+			> svg > path {
+				stroke: var(--main);
+			}
+		}
+	}
+
+	@media screen and (min-width: 550px) {
+		input.nav-toggle,
+		label.nav-toggle-label {
+			display: none;
+		}
+
+		.nav-toggle ~ nav {
+			display: flex;
+			flex-flow: row;
+			align-items: center;
+			gap: var(--spacing-l);
+			opacity: 1;
+			height: auto;
+
+			position: relative;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 1;
+
+			padding: 0;
+
+			border-radius: unset;
+
+			transition: none;
+
+			> a {
+				height: auto;
+			}
+
+			.nav-toggle-button {
+				display: none;
+			}
+		}
+	}
+
+	// #endregion
+
+	.nav-link {
+		font-weight: bold;
+		font-size: var(--font-size-sb);
+		display: inline-block;
+
+		text-decoration: none;
+		color: var(--black);
+
+		transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+		width: max-content;
+
+		margin-left: auto;
+
+		&:hover {
+			color: var(--main);
+		}
+	}
+
+	.nav-link.-accent {
+		background-color: var(--main);
+		color: var(--white);
+		padding: var(--spacing-xs) var(--spacing-l);
+
+		border-radius: var(--spacing-s);
+
+		transition: background-color 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+
+		&:hover {
+			background-color: var(--main-hover);
+		}
+	}
+
+	.nav-link.-main {
+		display: flex;
+		align-items: center;
+
+		margin-left: 0;
+
+		cursor: pointer;
+
+		font-family: var(--font-family-h);
+		font-weight: bold;
+		font-size: var(--font-size-h3);
+
+		img {
+			margin-right: var(--spacing-xs);
+		}
+	}
+</style>

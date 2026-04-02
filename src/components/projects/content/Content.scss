@@ -1,0 +1,126 @@
+.content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-l);
+
+  width: 100%;
+
+  grid-template-areas:
+    'features'
+    'description'
+    'contact'
+    'floorplan';
+  margin: 0 auto;
+
+  @media screen and (min-width: 768px) {
+    gap: var(--spacing-xl);
+    max-width: calc(100% - (4rem * 2) - (var(--spacing-s) * 2));
+  }
+
+  @media screen and (min-width: 980px) {
+    max-width: calc(100% - (6.5% * 2) - (var(--spacing-s) * 2));
+  }
+
+  @media screen and (min-width: 1200px) {
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-xl);
+    grid-template-areas:
+      'features contact'
+      'description contact'
+      'floorplan contact';
+  }
+
+  &-description {
+    grid-area: description;
+
+    h4 {
+      margin-bottom: var(--spacing-s);
+      text-transform: uppercase;
+      font-family: var(--font-family-h);
+      font-weight: bold;
+      font-size: 3.2rem;
+    }
+  }
+
+  &-contact {
+    grid-area: contact;
+
+    background-color: var(--main-light);
+    color: var(--white);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+
+    top: var(--spacing-xl);
+    padding: var(--spacing-xl) var(--spacing-l);
+    height: max-content;
+
+    @media screen and (min-width: 1200px) {
+      position: sticky;
+    }
+
+    h4 {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      margin-bottom: var(--spacing-l);
+
+      text-transform: uppercase;
+      font-family: var(--font-family-h);
+      font-weight: bold;
+      font-size: 2.4rem;
+    }
+
+    p {
+      margin-bottom: var(--spacing-xl);
+    }
+  }
+
+  &-floorplan {
+    grid-area: floorplan;
+
+    h4 {
+      margin-bottom: var(--spacing-s);
+      text-transform: uppercase;
+      font-family: var(--font-family-h);
+      font-weight: bold;
+      font-size: 3.2rem;
+    }
+  }
+
+  &-features__list {
+    padding: 0;
+    margin-bottom: var(--spacing-s);
+
+    grid-area: features;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    @media screen and (min-width: 768px) {
+      justify-content: unset;
+      gap: var(--spacing-xxl);
+      margin-top: var(--spacing-s);
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      font-weight: 500;
+
+      width: fit-content;
+      justify-content: center;
+
+      flex-flow: column;
+      list-style: none;
+
+      @media screen and (min-width: 500px) {
+        flex-flow: row;
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+.appear-left {
+  animation: appear-left 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+}
+
+@keyframes appear-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-5rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.appear-right {
+  animation: appear-left 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+
+  @media screen and (min-width: 768px) {
+    animation: appear-right 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+  }
+}
+
+@keyframes appear-right {
+  0% {
+    opacity: 0;
+    transform: translateX(5rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fly-in {
+  animation: fly-in 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+}
+
+@keyframes fly-in {
+  0% {
+    opacity: 0;
+    transform: translateY(5rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fade-in 1s cubic-bezier(0.445, 0.05, 0.55, 0.95) forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

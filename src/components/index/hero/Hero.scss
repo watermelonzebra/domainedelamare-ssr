@@ -1,0 +1,122 @@
+.fold {
+  width: 100%;
+}
+
+.fold-title {
+  font-size: 6.5dvw;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: var(--font-family-h);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xxs);
+
+  width: max-content;
+  margin: 0 auto;
+
+  margin-bottom: var(--spacing-l);
+  margin-top: var(--spacing-m);
+
+  line-height: 1;
+
+  &--highlight {
+    color: var(--main);
+  }
+
+  @media screen and (min-width: 500px) {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    gap: var(--spacing-s);
+    font-size: 6dvw;
+    margin-top: unset;
+  }
+
+  @media screen and (min-width: 768px) {
+    margin-bottom: var(--spacing-xxl);
+    gap: var(--spacing-m);
+  }
+
+  @media screen and (min-width: 1100px) {
+    &--highlight {
+      margin-left: 10rem;
+    }
+  }
+
+  @media screen and (min-width: 1260px) {
+    font-size: 8rem;
+  }
+
+  @media screen and (min-width: 1400px) {
+    &--highlight {
+      margin-left: 20rem;
+    }
+  }
+}
+
+.fold-newsletter-container {
+  width: 100%;
+}
+
+.fold-newsletter__image {
+  width: 100%;
+  height: auto;
+  max-height: 70rem;
+  object-fit: cover;
+
+  aspect-ratio: 1/1;
+
+  @media screen and (min-width: 500px) {
+    aspect-ratio: unset;
+  }
+}
+
+.fold-newsletter {
+  background-color: var(--main-light);
+  color: var(--white);
+
+  padding: var(--spacing-xxl) var(--spacing-xl);
+  margin: 0 1rem 0 auto;
+  margin-top: -4rem;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+
+  position: relative;
+  z-index: 1;
+
+  &--title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: var(--spacing-m);
+  }
+
+  > .btn {
+    margin-top: var(--spacing-xl);
+  }
+
+  @media screen and (min-width: 500px) {
+    > p {
+      max-width: 50dvw;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: var(--spacing-xxl) var(--spacing-xxxl);
+    margin: 0 var(--spacing-xl) 0 auto;
+    margin-top: -10rem;
+    max-width: calc(100% - 8rem);
+
+    > p {
+      max-width: 55rem;
+    }
+
+    > .btn {
+      margin-top: var(--spacing-xxl);
+    }
+  }
+
+  @media screen and (min-width: 1100px) {
+    padding: var(--spacing-xxl) 20rem;
+  }
+}

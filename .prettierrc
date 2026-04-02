@@ -1,0 +1,28 @@
+{
+	"useTabs": true,
+	"tabWidth": 2,
+	"singleQuote": true,
+	"trailingComma": "all",
+	"semi": true,
+	"printWidth": 120,
+	"bracketSpacing": true,
+	"htmlWhitespaceSensitivity": "css",
+	"proseWrap": "always",
+	"plugins": ["prettier-plugin-astro"],
+	"no-restricted-imports": [
+		"error",
+		{
+			"patterns": ["components/*/*"]
+		}
+	],
+	"overrides": [
+		{
+			"files": "*.astro",
+			"options": {
+				"parser": "astro"
+			}
+		}
+	],
+	"astroAllowShorthand": false,
+	"astroSkipFrontmatter": false
+}

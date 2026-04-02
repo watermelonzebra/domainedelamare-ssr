@@ -1,0 +1,26 @@
+.back-button {
+	display: flex;
+	gap: var(--spacing-xs);
+	align-items: center;
+
+	cursor: pointer;
+
+	&:hover {
+		color: var(--main);
+		fill: var(--main);
+	}
+}
+
+section {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+	gap: 2rem;
+
+	width: 100%;
+	margin: 0 auto;
+
+	@media screen and (min-width: 768px) {
+		gap: var(--spacing-xl);
+	}
+}

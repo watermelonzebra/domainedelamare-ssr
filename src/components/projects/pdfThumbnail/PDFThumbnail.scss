@@ -1,0 +1,112 @@
+.pdf-thumbnail {
+  display: inline-block;
+  position: relative;
+  min-height: 100px;
+  overflow: hidden;
+
+  &:hover .overlay-container__download {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  &:hover .overlay-container__pdf-controls {
+    transform: translateY(0);
+  }
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 4px;
+  max-width: 200px;
+  word-break: break-word;
+}
+
+.loading {
+  background-color: var(--white);
+  color: var(--black);
+  padding: var(--spacing-xs) var(--spacing-s);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: max-content;
+  z-index: 2;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  &__download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.9);
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+
+    > a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--main);
+      color: var(--white);
+      padding: var(--spacing-xs) var(--spacing-s);
+      border-radius: var(--spacing-xxs);
+      text-decoration: none;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: var(--main-hover);
+      }
+    }
+  }
+
+  &__pdf-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--spacing-m) var(--spacing-s);
+    background-color: rgba(255, 255, 255, 0.8);
+    font-size: var(--font-size-p);
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 2;
+
+    button {
+      background-color: var(--main);
+      color: var(--white);
+      border: none;
+      padding: var(--spacing-xs) var(--spacing-s);
+      border-radius: var(--spacing-xxs);
+      cursor: pointer;
+
+      &:disabled {
+        background-color: var(--grey);
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background-color: var(--main-hover);
+      }
+    }
+  }
+}
+
+.page-info {
+  flex-grow: 1;
+  text-align: center;
+}

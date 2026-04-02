@@ -1,0 +1,59 @@
+---
+/**
+ * src/pages/post/[postSlug].astro
+ * Single post detail page.
+ *
+ * Routing:
+ * - [postSlug] — descriptive param name (not bare [slug])
+ * - getStaticPaths uses the dedicated POST_SLUGS_QUERY (efficient)
+ *
+ * Accessibility:
+ * - h1 wraps the post title
+ * - <time> with datetime attr for publish date
+ * - Cover image alt comes from the Sanity field (required by schema)
+ * - PortableText rendered via PortableTextRenderer (handles links/images)
+ *
+ * SEO:
+ * - title + description passed to BaseLayout via PageLayout
+ * - og:image uses the mainImage URL from Sanity
+ */
+import type { InferGetStaticParamsType } from 'astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+import { getPost, getPostSlugs } from '@/sanity/queries/posts';
+import builder from '@/utils/image';
+
+import { getSiteSettings } from '@/sanity/queries/siteSettings';
+import { stegaClean } from '@sanity/client/stega';
+import ProjectPage from '@/components/projects/ProjectsPage';
+
+export async function getStaticPaths() {
+	const slugs = await getPostSlugs();
+	return slugs.map((postSlug) => ({ params: { postSlug } }));
+}
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+const { postSlug } = Astro.params as Params;
+const isDraftMode = Astro.url.searchParams.get('draft') === 'true'
+const post = await getPost(postSlug, isDraftMode);
+
+// Redirect to 404 if post not found (handles stale slugs in build)
+if (!post) {
+	return Astro.redirect('/404');
+}
+
+const siteSettings = await getSiteSettings(isDraftMode);
+
+const seoImageUrl = siteSettings.data?.seo?.ogImage
+	? builder.url(siteSettings.data?.seo?.ogImage, { width: 1200, height: 600 })
+	: undefined;
+const coverImageUrl = post.data?.contentImage ? builder.url(post.data.contentImage) : undefined;
+---
+
+<PageLayout
+	title={`${stegaClean(post.data?.seo?.title ?? post.data?.title)} | ${stegaClean(siteSettings.data?.siteName)}`}
+	description={post.data?.seo ? stegaClean(post.data.seo.description) : undefined}
+	ogImage={seoImageUrl ?? coverImageUrl}
+>
+	<h1 class="hidden">{post.data?.seo?.title ?? post.data?.title}</h1>
+	<ProjectPage initialPost={post} isDraftMode={isDraftMode} slug={postSlug} client:only="react" />
+</PageLayout>

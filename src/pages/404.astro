@@ -1,0 +1,47 @@
+---
+/**
+ * src/pages/404.astro
+ * Custom 404 page. Every Astro project should define this.
+ */
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout title="Page Not Found — Astro + Sanity" description="The page you requested could not be found.">
+  <div class="container not-found">
+    <h1 class="not-found__heading">404</h1>
+    <p class="not-found__message">
+      That page doesn&rsquo;t exist. It may have been moved or deleted.
+    </p>
+    <a href="/" class="not-found__link">Go to homepage</a>
+  </div>
+</PageLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-block: var(--space-9);
+    gap: var(--space-4);
+  }
+
+  .not-found__heading {
+    font-size: var(--text-5xl);
+    font-weight: 800;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .not-found__message {
+    font-family: var(--font-serif);
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .not-found__link {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-link);
+  }
+</style>
