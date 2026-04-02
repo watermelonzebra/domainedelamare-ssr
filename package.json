@@ -17,6 +17,7 @@
     "@astrojs/node": "^10.0.3",
     "@astrojs/react": "^5.0.1",
     "@astrojs/sitemap": "^3.0.0",
+    "@astrojs/vercel": "^10.0.4",
     "@astrojs/vue": "^6.0.1",
     "@conform-to/zod": "^1.17.1",
     "@react-pdf/renderer": "^4.3.2",
