@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/webmail",
+      "destination": "https://webmail.domainedelamare.fr",
+      "permanent": true
+    }
+  ]
+}
