@@ -1,9 +1,8 @@
 {
-  "redirects": [
+  "rewrites": [
     {
-      "source": "/webmail",
-      "destination": "https://webmail.domainedelamare.fr",
-      "permanent": true
+      "source": "/webmail/:path*",
+      "destination": "http://185.220.172.6/webmail/:path*"
     }
   ]
 }
