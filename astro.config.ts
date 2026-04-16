@@ -61,4 +61,11 @@ export default defineConfig({
 		robotsTxt(),
 		compressor(),
 	],
+
+	vite: {
+		define: {
+			'process.env.SECRET_MAIL_API_KEY': JSON.stringify(process.env.SECRET_MAIL_API_KEY),
+			'process.env.SECRET_MAIL_API_URL': JSON.stringify(process.env.SECRET_MAIL_API_URL),
+		},
+	},
 });

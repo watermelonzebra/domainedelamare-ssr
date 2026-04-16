@@ -47,7 +47,7 @@ const imageUrl = siteSettings.data?.seo?.ogImage
 	<h1 class="hidden">
 		{stegaClean(siteSettings.data?.seo?.title ?? undefined)}
 	</h1>
-	<HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only="react" />
+	<HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only />
 </PageLayout>
 
 <style>
