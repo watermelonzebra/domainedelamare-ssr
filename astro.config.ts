@@ -6,6 +6,8 @@ import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 import vercel from '@astrojs/vercel';
 
+import compressor from 'astro-compressor';
+
 // Load all env vars (public + private) for config-time use
 const {
 	PUBLIC_SANITY_PROJECT_ID,
@@ -53,9 +55,10 @@ export default defineConfig({
 				enabled: true,
 				studioUrl: PUBLIC_SANITY_STUDIO_URL,
 			},
-		}), // Required for astro-portabletext and any React islands
-		react(), // Auto-generates /sitemap-index.xml
+		}), // Auto-generates /sitemap-index.xml
+		react(),
 		sitemap(),
 		robotsTxt(),
+		compressor(),
 	],
 });
