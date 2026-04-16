@@ -15,7 +15,7 @@ import { stegaClean } from '@sanity/client/stega';
 import builder from '@/utils/image';
 // TODO add the clean thing for stega data
 
-const isDraftMode = Astro.url.searchParams.get('draft') === 'true'
+const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
 
 // const siteSettings = await getSiteSettings(isDraftMode);
 // const imageUrl = siteSettings.seo.ogImage ? builder.url(siteSettings.seo.ogImage, { width: 1200, height: 600 }) : '';
@@ -41,11 +41,11 @@ const imageUrl = siteSettings.data?.seo?.ogImage
 
 <PageLayout
 	title={stegaClean(siteSettings.data?.siteName ?? 'Domaine de la Mare')}
-	description={stegaClean(siteSettings.data?.siteDescription ?? undefined)}
+	description={stegaClean(siteSettings.data?.seo?.description ?? undefined)}
 	ogImage={imageUrl}
 >
 	<h1 class="hidden">
-		Artopex, votre partenaire pour trouver un nouveau logement à Arnèke. Demandez une visite sans engagement.
+		{stegaClean(siteSettings.data?.seo?.title ?? undefined)}
 	</h1>
 	<HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only="react" />
 </PageLayout>
