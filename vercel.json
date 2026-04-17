@@ -1,8 +1,9 @@
 {
-  "rewrites": [
-    {
-      "source": "/webmail/:path*",
-      "destination": "http://185.220.172.6/webmail/:path*"
-    }
-  ]
+	"rewrites": [
+		{
+			"source": "/webmail/:path*",
+			"destination": "http://185.220.172.6/webmail/:path*"
+		},
+		{ "source": "/(.*)", "destination": "/$1" }
+	]
 }

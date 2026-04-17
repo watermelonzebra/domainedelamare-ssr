@@ -5,6 +5,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 import vercel from '@astrojs/vercel';
+import astroLLMsGenerator from 'astro-llms-generate';
 
 import compressor from 'astro-compressor';
 
@@ -21,6 +22,7 @@ const {
 export default defineConfig({
 	// Site URL required for sitemap and canonical URLs
 	site: PUBLIC_WEBSITE_URL,
+	prefetch: true,
 
 	// Static output — switch to 'hybrid' if you embed Sanity Studio
 	output: 'server', // or "server"
@@ -57,8 +59,24 @@ export default defineConfig({
 			},
 		}), // Auto-generates /sitemap-index.xml
 		react(),
-		sitemap(),
-		robotsTxt(),
+		astroLLMsGenerator({
+			title: 'Domaine de la mare | maisons modernes | Arnèke',
+			description:
+				'Construisez votre avenir à Arnèke avec le Domaine de la Mare : des maisons modernes, économes et prêtes à vivre.',
+			includePatterns: ['**/*'], // Pages to include
+			excludePatterns: ['**/404*', '**/api/**'], // Pages to exclude
+			customSeparator: '\n\n---\n\n', // Custom separator for full content
+		}),
+		robotsTxt({
+			sitemap: true,
+		}),
+		sitemap({
+			customPages: [
+				PUBLIC_WEBSITE_URL + '/llms.txt',
+				PUBLIC_WEBSITE_URL + '/llms-small.txt',
+				PUBLIC_WEBSITE_URL + '/llms-full.txt',
+			],
+		}),
 		compressor(),
 	],
 
