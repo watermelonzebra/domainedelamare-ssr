@@ -11,6 +11,7 @@ import Header from '@/components/projects/header';
 import ImageGallery from '@/components/projects/ImageGallery';
 import Content from '@/components/projects/content';
 import { Icon } from '@/components/ui/Icon';
+import { stegaClean } from '@sanity/client/stega';
 
 type Props = {
 	initialPost: QueryResponseInitial<POST_BY_SLUG_QUERYResult>;
@@ -18,8 +19,10 @@ type Props = {
 	slug: string;
 };
 
-export default function ProjectPage({ initialPost, slug }: Props) {
+export default function ProjectPage({ initialPost, slug, isDraftMode }: Props) {
 	const { data: post } = useQuery(POST_BY_SLUG_QUERY, { slug }, { initial: initialPost });
+
+	const postData = isDraftMode ? post : stegaClean(post);
 
 	type ImageGallery = Array<{
 		src?: string;
@@ -30,38 +33,36 @@ export default function ProjectPage({ initialPost, slug }: Props) {
 
 	function createImages() {
 		images.push({
-			src: post?.contentImage ? builder.ogUrl(post.contentImage) : undefined,
-			thumb: post?.contentImage ? builder.thumbUrl(post.contentImage) : undefined,
-			alt: post?.contentImage?.alt ?? post?.title ?? undefined,
+			src: postData?.contentImage ? builder.ogUrl(postData.contentImage) : undefined,
+			thumb: postData?.contentImage ? builder.thumbUrl(postData.contentImage) : undefined,
+			alt: postData?.contentImage?.alt ?? postData?.title ?? undefined,
 		});
 
-		if (!post?.imageGallery?.length) return;
-		post.imageGallery.map((image) => {
+		if (!postData?.imageGallery?.length) return;
+		postData.imageGallery.map((image) => {
 			images.push({
 				src: builder.ogUrl(image),
 				thumb: builder.thumbUrl(image),
-				alt: image.alt ?? post.title ?? undefined,
+				alt: image.alt ?? postData.title ?? undefined,
 			});
 		});
 	}
 	createImages();
 
 	return (
-		<>
-			<section>
-				<h2 className="hidden">{post?.title}</h2>
+		<section id="offres">
+			<h2 className="hidden">{postData?.title}</h2>
 
-				<nav>
-					<a href="/" className="back-button">
-						<Icon type="chevron-left" stroke={1.2} />
-						<span>Retour à notre offres</span>
-					</a>
-				</nav>
+			<nav>
+				<a href="/" className="back-button">
+					<Icon type="chevron-left" stroke={1.2} />
+					<span>Retour à notre offres</span>
+				</a>
+			</nav>
 
-				<Header post={post} />
-				<ImageGallery images={images} />
-				<Content post={post} />
-			</section>
-		</>
+			<Header post={postData} />
+			<ImageGallery images={images} />
+			<Content post={postData} />
+		</section>
 	);
 }
