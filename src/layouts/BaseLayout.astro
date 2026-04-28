@@ -87,6 +87,8 @@ const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
 		<!-- robots -->
 		<meta name="robots" content="INDEX,FOLLOW" />
 
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
 		<!-- Page-specific head content (extra scripts, JSON-LD, etc.) -->
 		<slot name="head" />
 	</head>

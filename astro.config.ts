@@ -5,9 +5,19 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import robotsTxt from 'astro-robots-txt';
 import vercel from '@astrojs/vercel';
-import astroLLMsGenerator from 'astro-llms-generate';
+import node from "@astrojs/node"; 
 
 import compressor from 'astro-compressor';
+
+let adapter = vercel({
+		webAnalytics: {
+			enabled: true,
+		},
+	}); 
+
+if (process.argv[3] === "--node" || process.argv[4] === "--node") { 
+	adapter = node({ mode: "standalone" }); 
+}
 
 // Load all env vars (public + private) for config-time use
 const {
@@ -22,10 +32,37 @@ const {
 export default defineConfig({
 	// Site URL required for sitemap and canonical URLs
 	site: PUBLIC_WEBSITE_URL,
-	prefetch: true,
+
+	prefetch: {
+		prefetchAll: true,
+		defaultStrategy: 'hover',
+	},
+	experimental: {
+		clientPrerender: true,
+	},
 
 	// Static output — switch to 'hybrid' if you embed Sanity Studio
 	output: 'server', // or "server"
+
+	server: {
+		headers: {
+			// Prevents any site from framing this site
+			// 'X-Frame-Options': 'DENY',
+
+			// OR: Allows only your own site to frame it
+			'X-Frame-Options': 'SAMEORIGIN',
+
+			// Whitelists the sources allowed to load scripts, styles and frames — the strongest defense against XSS.
+			'Content-Security-Policy-Report-Only': `default-src 'self'; script-src 'self' 'unsafe-inline'; img-src * data`,
+
+			// Prevents browsers from MIME-sniffing a response away from the declared Content-Type.
+			'X-Content-Type-Options': 'nosniff',
+
+			'Referrer-Policy': 'strict-origin-when-cross-origin',
+
+			'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+		},
+	},
 
 	build: {
 		// Inline small CSS, external large — reduces render-blocking requests
@@ -37,11 +74,7 @@ export default defineConfig({
 		domains: ['cdn.sanity.io'],
 	},
 
-	adapter: vercel({
-		webAnalytics: {
-			enabled: true,
-		},
-	}),
+	adapter,
 
 	integrations: [
 		sanity({
@@ -59,18 +92,11 @@ export default defineConfig({
 			},
 		}), // Auto-generates /sitemap-index.xml
 		react(),
-		astroLLMsGenerator({
-			title: 'Domaine de la mare | maisons modernes | Arnèke',
-			description:
-				'Construisez votre avenir à Arnèke avec le Domaine de la Mare : des maisons modernes, économes et prêtes à vivre.',
-			includePatterns: ['**/*'], // Pages to include
-			excludePatterns: ['**/404*', '**/api/**'], // Pages to exclude
-			customSeparator: '\n\n---\n\n', // Custom separator for full content
-		}),
 		robotsTxt({
 			sitemap: true,
 		}),
 		sitemap({
+			customSitemaps: [PUBLIC_WEBSITE_URL +'/sitemap.xml'],
 			customPages: [
 				PUBLIC_WEBSITE_URL + '/llms.txt',
 				PUBLIC_WEBSITE_URL + '/llms-small.txt',

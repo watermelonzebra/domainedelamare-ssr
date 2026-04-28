@@ -18,23 +18,20 @@
  * - og:image uses the mainImage URL from Sanity
  */
 
-import type { InferGetStaticParamsType } from 'astro';
 import PageLayout from '@/layouts/PageLayout.astro';
-import { getPost, getPostSlugs } from '@/sanity/queries/posts';
+import { getPost } from '@/sanity/queries/posts';
 import builder from '@/utils/image';
 
 import { getSiteSettings } from '@/sanity/queries/siteSettings';
 import { stegaClean } from '@sanity/client/stega';
 import ProjectPage from '@/components/projects/ProjectsPage';
 
-export async function getStaticPaths() {
-	const slugs = await getPostSlugs();
-	return slugs.map((postSlug) => ({ params: { postSlug } }));
+const { postSlug } = Astro.params;
+if (!postSlug) {
+	return Astro.redirect('/404');
 }
 
-type Params = InferGetStaticParamsType<typeof getStaticPaths>;
-const { postSlug } = Astro.params as Params;
-const isDraftMode = Astro.url.searchParams.get('draft') === 'true'
+const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
 const post = await getPost(postSlug, isDraftMode);
 
 // Redirect to 404 if post not found (handles stale slugs in build)
