@@ -21,9 +21,11 @@ export interface Props {
 	/** Canonical URL override — defaults to Astro.url */
 	canonicalUrl?: string;
 	/** Page-level <head> content via named slot */
+
+	structuredData: 'Article' | 'BlogPosting' | 'Event' | 'LocalBusiness' | 'none' | 'Organization' | 'Product' | null;
 }
 
-const { title, description = 'A blog powered by Astro and Sanity.', ogImage, canonicalUrl } = Astro.props;
+const { title, description = 'A blog powered by Astro and Sanity.', ogImage, canonicalUrl, structuredData } = Astro.props;
 
 const siteUrl = Astro.site ?? new URL(Astro.url);
 const canonical = canonicalUrl ?? Astro.url.href;
@@ -88,6 +90,18 @@ const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
 		<meta name="robots" content="INDEX,FOLLOW" />
 
 		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<script
+			type="application/ld+json"
+			set:html={JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': structuredData,
+				name: title,
+				description: description,
+				url: canonical,
+				...(ogImage && { image: ogImage }),
+			})}
+		/>
 
 		<!-- Page-specific head content (extra scripts, JSON-LD, etc.) -->
 		<slot name="head" />

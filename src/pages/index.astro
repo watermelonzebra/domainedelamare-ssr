@@ -43,6 +43,7 @@ const imageUrl = siteSettings.data?.seo?.ogImage
 	title={stegaClean(siteSettings.data?.siteName ?? 'Domaine de la Mare')}
 	description={stegaClean(siteSettings.data?.seo?.description ?? undefined)}
 	ogImage={imageUrl}
+	structuredData={'LocalBusiness'}
 >
 	<h1 class="hidden">
 		{stegaClean(siteSettings.data?.seo?.title ?? undefined)}

@@ -18,6 +18,7 @@ export interface Props {
   description?: string;
   ogImage?: string;
   canonicalUrl?: string;
+  structuredData: 'Article' | 'BlogPosting' | 'Event' | 'LocalBusiness' | 'none' | 'Organization' | 'Product' | null;
 }
 
 const props = Astro.props;

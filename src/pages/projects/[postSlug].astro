@@ -51,6 +51,7 @@ const coverImageUrl = post.data?.contentImage ? builder.url(post.data.contentIma
 	title={`${stegaClean(post.data?.seo?.title ?? post.data?.title)} | ${stegaClean(siteSettings.data?.siteName)}`}
 	description={post.data?.seo ? stegaClean(post.data.seo.description) : undefined}
 	ogImage={seoImageUrl ?? coverImageUrl}
+	structuredData={'Product'}
 >
 	<h1 class="hidden">{post.data?.seo?.title ?? post.data?.title}</h1>
 	<ProjectPage initialPost={post} isDraftMode={isDraftMode} slug={postSlug} client:only="react" />
