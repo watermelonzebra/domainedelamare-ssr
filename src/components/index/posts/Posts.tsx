@@ -8,7 +8,7 @@ export interface PostsProps {
 }
 
 export const Posts: React.FC<PostsProps> = ({ posts }) => (
-	<article className="posts">
+	<article className="posts" id="offres">
 		<h2>Nos offres</h2>
 
 		{posts.length > 0 ? (

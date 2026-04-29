@@ -24,31 +24,6 @@ export default function ProjectPage({ initialPost, slug, isDraftMode }: Props) {
 
 	const postData = isDraftMode ? post : stegaClean(post);
 
-	type ImageGallery = Array<{
-		src?: string;
-		thumb?: string;
-		alt?: string;
-	}>;
-	const images: ImageGallery = [];
-
-	function createImages() {
-		images.push({
-			src: postData?.contentImage ? builder.ogUrl(postData.contentImage) : undefined,
-			thumb: postData?.contentImage ? builder.thumbUrl(postData.contentImage) : undefined,
-			alt: postData?.contentImage?.alt ?? postData?.title ?? undefined,
-		});
-
-		if (!postData?.imageGallery?.length) return;
-		postData.imageGallery.map((image) => {
-			images.push({
-				src: builder.ogUrl(image),
-				thumb: builder.thumbUrl(image),
-				alt: image.alt ?? postData.title ?? undefined,
-			});
-		});
-	}
-	createImages();
-
 	return (
 		<section id="offres">
 			<h2 className="hidden">{postData?.title}</h2>
@@ -61,7 +36,7 @@ export default function ProjectPage({ initialPost, slug, isDraftMode }: Props) {
 			</nav>
 
 			<Header post={postData} />
-			<ImageGallery images={images} />
+			<ImageGallery post={postData} />
 			<Content post={postData} />
 		</section>
 	);

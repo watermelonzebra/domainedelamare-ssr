@@ -21,15 +21,12 @@ type Props = {
 };
 
 export default function HomePage({ initialPageContent, initialPosts, isDraftMode }: Props) {
-	console.log('[HomePage] isDraftMode:', isDraftMode);
-
 	const { data: pageContent } = useQuery(PAGE_CONTENT_QUERY, {}, { initial: initialPageContent });
 
 	const { data: posts } = useQuery(POSTS_SUMMARY_QUERY, {}, { initial: initialPosts });
 
 	const pageContentData = isDraftMode ? pageContent : stegaClean(pageContent);
 	const postsData = isDraftMode ? posts : stegaClean(posts);
-	console.log('[useQuery] sourceMap:', (initialPosts as any).sourceMap ? '✅' : '❌');
 
 	return (
 		<>

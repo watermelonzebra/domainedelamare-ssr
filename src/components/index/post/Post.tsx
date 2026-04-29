@@ -38,12 +38,13 @@ export const Post: React.FC<PostProps> = ({ post }) => {
 		});
 	}
 
-	// Run on initial load
-	applyDraftToLinks();
-
 	useEffect(() => {
 		return applyDraftToLinks();
 	}, [post]);
+	
+	useEffect(() => {
+		return applyDraftToLinks();
+	});
 
 	return (
 		<li className="post-list-item">

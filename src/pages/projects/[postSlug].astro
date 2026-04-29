@@ -25,6 +25,10 @@ import builder from '@/utils/image';
 import { getSiteSettings } from '@/sanity/queries/siteSettings';
 import { stegaClean } from '@sanity/client/stega';
 import ProjectPage from '@/components/projects/ProjectsPage';
+import { Icon } from '@/components/ui/Icon';
+import Header from '@/components/projects/header';
+import ImageGallery from '@/components/projects/ImageGallery';
+import Content from '@/components/projects/content';
 
 const { postSlug } = Astro.params;
 if (!postSlug) {
@@ -54,5 +58,25 @@ const coverImageUrl = post.data?.contentImage ? builder.url(post.data.contentIma
 	structuredData={'Product'}
 >
 	<h1 class="hidden">{post.data?.seo?.title ?? post.data?.title}</h1>
-	<ProjectPage initialPost={post} isDraftMode={isDraftMode} slug={postSlug} client:only="react" />
+
+	{
+		isDraftMode ? (
+			<ProjectPage initialPost={post} isDraftMode={isDraftMode} slug={postSlug} client:only="react" />
+		) : (
+			<section>
+				<h2 class="hidden">{post.data?.title}</h2>
+
+				<nav>
+					<a href="/" class="back-button">
+						<Icon type="chevron-left" stroke={1.2} />
+						<span>Retour à notre offres</span>
+					</a>
+				</nav>
+
+				<Header post={stegaClean(post.data)} />
+				<ImageGallery post={stegaClean(post.data)} client:load />
+				<Content post={stegaClean(post.data)} />
+			</section>
+		)
+	}
 </PageLayout>

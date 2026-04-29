@@ -13,7 +13,7 @@ import { getPosts } from '@/sanity/queries/posts';
 import { getSiteSettings } from '@/sanity/queries/siteSettings';
 import { stegaClean } from '@sanity/client/stega';
 import builder from '@/utils/image';
-// TODO add the clean thing for stega data
+
 
 const isDraftMode = Astro.url.searchParams.get('draft') === 'true';
 
@@ -48,7 +48,12 @@ const imageUrl = siteSettings.data?.seo?.ogImage
 	<h1 class="hidden">
 		{stegaClean(siteSettings.data?.seo?.title ?? undefined)}
 	</h1>
-	<HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only />
+
+	{
+		isDraftMode 
+		? <HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} client:only="react" />
+		: <HomePage initialPageContent={pageContent} initialPosts={posts} isDraftMode={isDraftMode} />
+	}
 </PageLayout>
 
 <style>

@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback, useRef, type TouchEventHandler } from 'react';
 import { Icon } from '../ui/Icon';
+import builder from '@/utils/image';
+import type { POST_BY_SLUG_QUERYResult } from 'sanity.types';
 
 type ImageGallery = Array<{
 	src?: string;
@@ -7,15 +9,39 @@ type ImageGallery = Array<{
 	alt?: string;
 }>;
 
+export interface GalleryProps {
+	post: POST_BY_SLUG_QUERYResult;
+}
+
 /**
  * ImageGallery
  * @param {{ images: Array<{src: string, thumb: string, alt: string}> }} props
  */
-export default function Gallery({ images = [] }: { images: ImageGallery }) {
+export default function Gallery({ post }: GalleryProps) {
 	const [active, setActive] = useState(0);
 	const [modal, setModal] = useState(false);
 	const [fading, setFading] = useState(false);
 	const touchStartX = useRef<number | null>(null);
+
+	const images: ImageGallery = [];
+
+	function createImages() {
+		images.push({
+			src: post?.contentImage ? builder.ogUrl(post.contentImage) : undefined,
+			thumb: post?.contentImage ? builder.thumbUrl(post.contentImage) : undefined,
+			alt: post?.contentImage?.alt ?? post?.title ?? undefined,
+		});
+
+		if (!post?.imageGallery?.length) return;
+		post.imageGallery.map((image) => {
+			images.push({
+				src: builder.ogUrl(image),
+				thumb: builder.thumbUrl(image),
+				alt: image.alt ?? post.title ?? undefined,
+			});
+		});
+	}
+	createImages();
 
 	const len = images.length;
 	const prevIdx = (((active - 1) % len) + len) % len;

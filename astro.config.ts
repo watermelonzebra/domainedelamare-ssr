@@ -53,7 +53,7 @@ export default defineConfig({
 			'X-Frame-Options': 'SAMEORIGIN',
 
 			// Whitelists the sources allowed to load scripts, styles and frames — the strongest defense against XSS.
-			'Content-Security-Policy-Report-Only': `default-src 'self'; script-src 'self' 'unsafe-inline'; img-src * data`,
+			'Content-Security-Policy-Report-Only': `default-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' data: https://cdn.sanity.io; script-src 'self' 'unsafe-inline' https://cdn.vercel-insights.com https://*.sanity.io; connect-src 'self' https://*.vercel-insights.com https://*.sanity.io wss://*.sanity.io;`,
 
 			// Prevents browsers from MIME-sniffing a response away from the declared Content-Type.
 			'X-Content-Type-Options': 'nosniff',
