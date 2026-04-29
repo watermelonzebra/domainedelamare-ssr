@@ -4,7 +4,6 @@ import './ProjectsPage.scss';
 
 import type { QueryResponseInitial } from '@sanity/react-loader';
 import type { POST_BY_SLUG_QUERYResult } from 'sanity.types';
-import builder from '@/utils/image';
 import { POST_BY_SLUG_QUERY } from '@/sanity/queries/posts.queries';
 
 import Header from '@/components/projects/header';
