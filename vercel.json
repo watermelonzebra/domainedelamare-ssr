@@ -2,7 +2,7 @@
 	"rewrites": [
 		{
 			"source": "/webmail/:path*",
-			"destination": "http://185.220.172.6/webmail/:path*"
+			"destination": "https://mail.zxcs.nl"
 		},
 		{ "source": "/(.*)", "destination": "/$1" }
 	]
