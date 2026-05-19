@@ -1,9 +1,10 @@
 {
-	"rewrites": [
+	"rewrites": [{ "source": "/(.*)", "destination": "/$1" }],
+	"redirects": [
 		{
-			"source": "/webmail/:path*",
-			"destination": "https://mail.zxcs.nl"
-		},
-		{ "source": "/(.*)", "destination": "/$1" }
+			"source": "/webmail",
+			"destination": "https://mail.zxcs.nl",
+			"permanent": true
+		}
 	]
 }
